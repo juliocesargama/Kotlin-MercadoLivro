@@ -21,7 +21,7 @@ class CustomerController(
 
     @GetMapping("/{id}")
     fun getById(@PathVariable id: Integer): Customer? {
-        return customerService.getById(id)
+        return customerService.findById(id)
     }
 
     @PostMapping
@@ -33,7 +33,8 @@ class CustomerController(
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable id: Integer, @RequestBody customer: PutCustomerRequest) {
-        customerService.update(customer.toCustomer(id))
+        val customerFound = customerService.findById(id)
+        customerService.update(customer.toCustomer(customerFound))
     }
 
     @DeleteMapping

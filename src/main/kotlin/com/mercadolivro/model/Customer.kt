@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import javax.persistence.Column
 import javax.persistence.Id
 import javax.persistence.Entity
+import javax.persistence.EnumType.STRING
+import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 
@@ -34,4 +36,14 @@ data class Customer (
         example = "john@doe.com",
         type = "String",
     )
-    var email: String)
+    var email: String,
+
+
+    @Column
+    @Enumerated(STRING)
+    @field:Schema(
+        description = "A customer status",
+        example = "ACTIVE",
+        type = "Customer Status",
+    )
+    var status: CustomerStatus)

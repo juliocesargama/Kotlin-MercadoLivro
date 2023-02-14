@@ -1,6 +1,7 @@
 package com.mercadolivro.service
 
 import com.mercadolivro.model.Customer
+import com.mercadolivro.model.CustomerStatus.INACTIVE
 import com.mercadolivro.repository.BookRepository
 import com.mercadolivro.repository.CustomerRepository
 import org.springframework.stereotype.Service
@@ -20,7 +21,7 @@ class CustomerService(
         return customerRepository.findAll().toList()
     }
 
-    fun getById(id: Integer): Customer? {
+    fun findById(id: Integer): Customer? {
         return customerRepository.findById(id).orElseThrow()
     }
 
@@ -28,19 +29,24 @@ class CustomerService(
         customerRepository.save(customer)
     }
 
-    fun update(customer: Customer) {
+    fun update(customer: Customer?) {
 
-        if(!customerRepository.existsById(customer.id!!)){
+        if(!customerRepository.existsById(customer?.id!!)){
             throw Exception()
         }
         customerRepository.save(customer)
     }
 
     fun delete(id: Integer) {
-        val customer = getById(id)
-        bookService.deleteByCustomer(customer)
+        val customer = findById(id)
 
-        customerRepository.deleteById(id)
+        if(customer != null) {
+            bookService.deleteByCustomer(customer)
+            customer?.status = INACTIVE
+            customerRepository.save(customer)
+        }else{
+            throw Exception()
+        }
     }
 
 }

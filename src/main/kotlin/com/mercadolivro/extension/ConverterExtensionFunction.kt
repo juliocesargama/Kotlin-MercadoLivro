@@ -7,13 +7,18 @@ import com.mercadolivro.controller.request.PutCustomerRequest
 import com.mercadolivro.model.Book
 import com.mercadolivro.model.BookStatus.AVAILABLE
 import com.mercadolivro.model.Customer
+import com.mercadolivro.model.CustomerStatus.ACTIVE
+import kotlin.reflect.jvm.internal.impl.load.java.lazy.descriptors.DeclaredMemberIndex.Empty
 
 fun PostCustomerRequest.toCustomer() : Customer{
-    return Customer(id = null, name = this.name, email = this.email)
+    return Customer(id = null, name = this.name, email = this.email, status = ACTIVE)
 }
 
-fun PutCustomerRequest.toCustomer(id: Integer) : Customer{
-    return Customer(id = id, name = this.name, email = this.email)
+fun PutCustomerRequest.toCustomer(previousCustomer: Customer?) : Customer? {
+    if (previousCustomer != null) {
+        return Customer(id = previousCustomer.id, name = previousCustomer.name, email = previousCustomer.email, status = previousCustomer.status)
+    }
+    return null
 }
 
 fun PostBookRequest.toBook(customer: Customer?) : Book{
