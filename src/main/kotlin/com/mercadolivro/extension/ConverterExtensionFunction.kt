@@ -16,15 +16,19 @@ fun PostCustomerRequest.toCustomer() : Customer{
 
 fun PutCustomerRequest.toCustomer(previousCustomer: Customer?) : Customer? {
     if (previousCustomer != null) {
-        return Customer(id = previousCustomer.id, name = previousCustomer.name, email = previousCustomer.email, status = previousCustomer.status)
+        return Customer(id = previousCustomer.id, name = previousCustomer.name,
+            email = previousCustomer.email, status = previousCustomer.status)
     }
     return null
 }
 
 fun PostBookRequest.toBook(customer: Customer?) : Book{
-    return Book(id = null, name = this.name, price = this.price, status = AVAILABLE, customer)
+    return Book(id = null, name = this.name, price = this.price, status = AVAILABLE,
+        customer = customer
+    )
 }
 
 fun PutBookRequest.toBook(book: Book) : Book{
-    return Book(id = book.id, name = this.name ?: book.name, price = this.price ?: book.price, status = book.status, customer = book.customer)
+    return Book(id = book.id, name = this.name ?: book.name, price = this.price ?:
+    book.price, status = book.status, customer = book.customer)
 }

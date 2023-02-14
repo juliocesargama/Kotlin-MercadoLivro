@@ -1,5 +1,7 @@
 package com.mercadolivro.model
 
+import com.mercadolivro.model.BookStatus.ARCHIEVED
+import com.mercadolivro.model.BookStatus.DELETED
 import io.swagger.v3.oas.annotations.media.Schema
 import java.math.BigDecimal
 import javax.persistence.*
@@ -28,15 +30,6 @@ data class Book (
     )
     var price: BigDecimal,
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    @field:Schema(
-        description = "The status of a book",
-        example = "AVAILABLE",
-        type = "BookStatus",
-    )
-    var status: BookStatus?,
-
     @ManyToOne
     @field:Schema(
         description = "The identification of the customer related to the book",
@@ -45,5 +38,28 @@ data class Book (
     )
     @JoinColumn(name = "customer_id")
     var customer: Customer?
-)
+) {
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    @field:Schema(
+        description = "The status of a book",
+        example = "AVAILABLE",
+        type = "BookStatus",
+    )
+    var status: BookStatus? = null
+        set(value){
+            if (field == DELETED || field == ARCHIEVED){
+                throw Exception("Couldn't change book with status ${field!!.name}")
+            }
+            field = value
+        }
+
+    constructor(id: Int? = null,
+        name: String,
+        price: BigDecimal,
+        customer: Customer? =  null,
+        status: BookStatus?) : this(id, name, price, customer) {
+            this.status = status
+        }
+}
