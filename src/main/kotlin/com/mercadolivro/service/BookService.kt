@@ -23,7 +23,7 @@ class BookService(
         return bookRepository.findByStatus(BookStatus.AVAILABLE)
     }
 
-    fun findById(id: Integer): Book {
+    fun findById(id: Int): Book {
         return bookRepository.findById(id).orElseThrow()
     }
 
@@ -31,7 +31,7 @@ class BookService(
         bookRepository.save(book)
     }
 
-    fun delete(id: Integer){
+    fun delete(id: Int){
         val book = findById(id)
 
         book.status = DELETED

@@ -2,7 +2,9 @@ package com.mercadolivro.controller
 
 import com.mercadolivro.controller.request.PostBookRequest
 import com.mercadolivro.controller.request.PutBookRequest
+import com.mercadolivro.controller.response.BookResponse
 import com.mercadolivro.extension.toBook
+import com.mercadolivro.extension.toResponse
 import com.mercadolivro.model.Book
 import com.mercadolivro.service.BookService
 import com.mercadolivro.service.CustomerService
@@ -27,18 +29,18 @@ class BookController(
 ) {
 
     @GetMapping
-    fun getAll(): List<Book>{
-       return bookService.getAll()
+    fun getAll(): List<BookResponse>{
+       return bookService.getAll().map { it.toResponse() }
     }
 
     @GetMapping("/available")
-    fun getActives(): List<Book>{
-        return bookService.findAvailable()
+    fun getActives(): List<BookResponse>{
+        return bookService.findAvailable().map { it.toResponse() }
     }
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: Integer): Book{
-        return bookService.findById(id)
+    fun getById(@PathVariable id: Int): BookResponse{
+        return bookService.findById(id).toResponse()
     }
 
     @PostMapping
@@ -50,14 +52,14 @@ class BookController(
 
     @PutMapping
     @ResponseStatus(NO_CONTENT)
-    fun update(@PathVariable id: Integer, @RequestBody book: PutBookRequest){
+    fun update(@PathVariable id: Int, @RequestBody book: PutBookRequest){
         val bookSaved = bookService.findById(id)
         bookService.update(book.toBook(bookSaved))
     }
 
     @DeleteMapping
     @ResponseStatus(NO_CONTENT)
-    fun delete(@PathVariable id: Integer){
+    fun delete(@PathVariable id: Int){
         bookService.delete(id)
     }
 }

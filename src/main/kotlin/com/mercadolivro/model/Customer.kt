@@ -20,7 +20,7 @@ data class Customer (
         example = "1",
         type = "Integer"
     )
-    var id: Integer?,
+    var id: Int? = null,
 
     @Column
     @field:Schema(

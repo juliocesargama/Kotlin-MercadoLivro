@@ -21,7 +21,7 @@ class CustomerService(
         return customerRepository.findAll().toList()
     }
 
-    fun findById(id: Integer): Customer? {
+    fun findById(id: Int): Customer? {
         return customerRepository.findById(id).orElseThrow()
     }
 
@@ -37,7 +37,7 @@ class CustomerService(
         customerRepository.save(customer)
     }
 
-    fun delete(id: Integer) {
+    fun delete(id: Int) {
         val customer = findById(id)
 
         if(customer != null) {
